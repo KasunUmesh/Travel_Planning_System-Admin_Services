@@ -1,6 +1,7 @@
 package lk.ijse.Travel_Planning_System.AdminServices.service.impl;
 
 import lk.ijse.Travel_Planning_System.AdminServices.dto.AdminDTO;
+import lk.ijse.Travel_Planning_System.AdminServices.persistance.AdminDAO;
 import lk.ijse.Travel_Planning_System.AdminServices.service.AdminService;
 import lk.ijse.Travel_Planning_System.AdminServices.util.DataTypeConversion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,12 @@ public class AdminServiceIMPL implements AdminService {
 
     @Autowired
     private DataTypeConversion dataTypeConversion;
-    
+
+    @Autowired
+    private AdminDAO adminDAO;
+
     @Override
     public AdminDTO saveAdmin(AdminDTO adminDTO) {
-        return null;
+        return dataTypeConversion.getAdminDTO(adminDAO.save(dataTypeConversion.getAdminEntity(adminDTO)));
     }
 }
