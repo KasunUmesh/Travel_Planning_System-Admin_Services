@@ -18,6 +18,6 @@ public class Admin implements SuperEntity{
     @Column(nullable = false)
     private String adminPassword;
     @Lob
-    @Column(columnDefinition = "Text")
+    @Column(columnDefinition = "MEDIUMBLOB")
     private String adminIMG;
 }
