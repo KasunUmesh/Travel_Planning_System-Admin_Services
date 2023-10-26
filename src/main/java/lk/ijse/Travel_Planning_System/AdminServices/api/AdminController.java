@@ -1,12 +1,15 @@
 package lk.ijse.Travel_Planning_System.AdminServices.api;
 
+import jakarta.validation.Valid;
 import lk.ijse.Travel_Planning_System.AdminServices.dto.AdminDTO;
 import lk.ijse.Travel_Planning_System.AdminServices.service.AdminService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
@@ -28,10 +31,11 @@ public class AdminController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    AdminDTO saveAdmin(
-                       @RequestParam("adminName") String adminName,
-                       @RequestParam("adminPassword") String adminPassword,
-                       @RequestParam("adminIMG") MultipartFile file) {
+    AdminDTO saveAdmin(@Valid
+            @RequestPart("adminName") String adminName,
+            @RequestPart("adminEmail") String adminEmail,
+            @RequestPart("adminPassword") String adminPassword,
+            @RequestPart("adminIMG") MultipartFile file, Errors errors) {
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         if (fileName.contains("..")) {
@@ -45,15 +49,16 @@ public class AdminController {
             throw new RuntimeException(e);
         }
 
+        if (errors.hasFieldErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errors.getFieldErrors().get(0).getDefaultMessage());
+        }
+
         AdminDTO adminDTO = new AdminDTO();
 
         adminDTO.setAdminName(adminName);
+        adminDTO.setAdminEmail(adminEmail);
         adminDTO.setAdminPassword(adminPassword);
         adminDTO.setAdminIMG(convertedIMG);
-
-        System.out.println(adminName);
-        System.out.println(adminPassword);
-        System.out.println(file);
 
         return adminService.saveAdmin(adminDTO);
     }

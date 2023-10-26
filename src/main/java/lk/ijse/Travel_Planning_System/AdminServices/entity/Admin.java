@@ -11,13 +11,15 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Admin implements SuperEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String adminID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer adminID;
     @Column(nullable = false)
     private String adminName;
     @Column(nullable = false)
+    private String adminEmail;
+    @Column(nullable = false)
     private String adminPassword;
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "LONGBLOB")
     private String adminIMG;
 }
