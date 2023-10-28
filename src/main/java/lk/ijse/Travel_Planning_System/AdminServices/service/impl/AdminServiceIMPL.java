@@ -5,6 +5,7 @@ import lk.ijse.Travel_Planning_System.AdminServices.Repository.AdminDAO;
 import lk.ijse.Travel_Planning_System.AdminServices.service.AdminService;
 import lk.ijse.Travel_Planning_System.AdminServices.util.DataTypeConversion;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,8 @@ public class AdminServiceIMPL implements AdminService {
 
     @Override
     public AdminDTO saveAdmin(AdminDTO adminDTO) {
+
+
         return dataTypeConversion.getAdminDTO(adminDAO.save(dataTypeConversion.getAdminEntity(adminDTO)));
     }
 }

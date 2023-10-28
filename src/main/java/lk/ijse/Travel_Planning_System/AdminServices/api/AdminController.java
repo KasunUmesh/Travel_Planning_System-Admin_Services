@@ -3,8 +3,10 @@ package lk.ijse.Travel_Planning_System.AdminServices.api;
 import jakarta.validation.Valid;
 import lk.ijse.Travel_Planning_System.AdminServices.dto.AdminDTO;
 import lk.ijse.Travel_Planning_System.AdminServices.service.AdminService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -23,14 +25,18 @@ import java.util.Base64;
 @CrossOrigin("*")
 public class AdminController {
 
+    @Autowired
     private final AdminService adminService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public AdminController(AdminService adminService) {
         this.adminService = adminService;
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE}, path = "/save")
     AdminDTO saveAdmin(@Valid
             @RequestPart("adminName") String adminName,
             @RequestPart("adminEmail") String adminEmail,
@@ -57,7 +63,7 @@ public class AdminController {
 
         adminDTO.setAdminName(adminName);
         adminDTO.setAdminEmail(adminEmail);
-        adminDTO.setAdminPassword(adminPassword);
+        adminDTO.setAdminPassword(this.passwordEncoder.encode(adminPassword));
         adminDTO.setAdminIMG(convertedIMG);
 
         return adminService.saveAdmin(adminDTO);
