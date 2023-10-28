@@ -2,10 +2,13 @@ package lk.ijse.Travel_Planning_System.AdminServices.api;
 
 import jakarta.validation.Valid;
 import lk.ijse.Travel_Planning_System.AdminServices.dto.AdminDTO;
+import lk.ijse.Travel_Planning_System.AdminServices.dto.AdminLoginDTO;
+import lk.ijse.Travel_Planning_System.AdminServices.response.LoginResponse;
 import lk.ijse.Travel_Planning_System.AdminServices.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -68,4 +71,13 @@ public class AdminController {
 
         return adminService.saveAdmin(adminDTO);
     }
+
+    @PostMapping(path = "/adminlogin")
+    public ResponseEntity<?> loginAdmin(@RequestBody AdminLoginDTO adminLoginDTO) {
+
+        LoginResponse loginResponse = adminService.loginAdmin(adminLoginDTO);
+
+        return ResponseEntity.ok(loginResponse);
+    }
+
 }

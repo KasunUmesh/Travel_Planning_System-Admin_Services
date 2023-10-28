@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class AdminLoginDTO {
 
-    private String loginEmail;
-    private String loginPassword;
+    private String adminEmail;
+    private String adminPassword;
 }
